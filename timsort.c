@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #include<stdbool.h>
 
+#include<time.h>
+#define len 1000
 const int RUN = 32; 
 int min(int x, int y) {
     if(x<y) {
@@ -10,7 +12,7 @@ int min(int x, int y) {
     return y;
 }
 
-bool check(int arr[], int len) {
+bool check(int arr[]) {
     int i;
     for(int i = 0; i < len-1; i++) {
         if(arr[i] > arr[i+1]) {
@@ -20,9 +22,9 @@ bool check(int arr[], int len) {
     return true;
 }
 
-void print_sorted(int arr[], int len) {
+void print_sorted(int arr[]) {
     bool sorted;
-    sorted = check(arr, len);
+    sorted = check(arr);
     if(!sorted) {
         printf("Array is not sorted \n");
     } else {
@@ -82,28 +84,39 @@ void merge(int arr[], int l, int m, int r) {
 } 
 
 //the main algo here
-void timSort(int arr[], int n) { 
-    for (int i = 0; i < n; i+=RUN) 
-        insertionSort(arr, i, min((i+31),(n-1))); 
-    for (int size = RUN; size < n; size = 2*size) { 
-        for (int left = 0; left < n; left += 2*size) { 
+void timSort(int arr[]) { 
+    for (int i = 0; i < len; i+=RUN) {
+        insertionSort(arr, i, min((i+31),(len-1)));
+    } 
+    for (int size = RUN; size < len; size = 2*size) { 
+        for (int left = 0; left < len; left += 2*size) { 
             int mid = left + size - 1; 
-            int right = min((left + 2*size - 1),(n-1)); 
+            int right = min((left + 2*size - 1),(len-1));
+            //  printf("ITERATING MERGE %d, %d \n", size, left);
             merge(arr, left, mid, right); 
         } 
     } 
 } 
 
 int main() {
-    int len = 100;
-    int arr[len];
+    int *arr = (int*)malloc(len * sizeof(int));
     srand(0);
     int i;
     for(i=0; i<len;i++){
-        arr[i] = rand();
+        arr[i] = (rand() %1000) + 100;
     }
-    print_sorted(arr, len);    
-    timSort(arr, len);
-    print_sorted(arr, len);    
+    print_sorted(arr);
+    printf("%d\n", arr[len-1]);
+
+    //taking time
+    clock_t start, end;
+    double cpu_time_used;
+    start = clock();
+    timSort(arr);
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+    print_sorted(arr);    
+    printf("Time taken: %f \n", cpu_time_used);
     return 0;
 }
