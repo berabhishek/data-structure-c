@@ -3,7 +3,7 @@
 #include<stdbool.h>
 
 #include<time.h>
-#define len 1000
+#define len 262144
 const int RUN = 32; 
 int min(int x, int y) {
     if(x<y) {
@@ -92,7 +92,6 @@ void timSort(int arr[]) {
         for (int left = 0; left < len; left += 2*size) { 
             int mid = left + size - 1; 
             int right = min((left + 2*size - 1),(len-1));
-            //  printf("ITERATING MERGE %d, %d \n", size, left);
             merge(arr, left, mid, right); 
         } 
     } 
