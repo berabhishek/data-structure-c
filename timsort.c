@@ -97,25 +97,41 @@ void timSort(int arr[]) {
     } 
 } 
 
-int main() {
-    int *arr = (int*)malloc(len * sizeof(int));
+void createArray(int arr[]) {
     srand(0);
     int i;
     for(i=0; i<len;i++){
         arr[i] = (rand() %1000) + 100;
     }
-    print_sorted(arr);
-    printf("%d\n", arr[len-1]);
-
-    //taking time
+}
+int main() {
+    int *arr = (int*)malloc(len * sizeof(int));
     clock_t start, end;
     double cpu_time_used;
+
+    createArray(arr);
+
+    print_sorted(arr);
+
+    //Tim sort
+    //taking time
+    
     start = clock();
     timSort(arr);
     end = clock();
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
     print_sorted(arr);    
-    printf("Time taken: %f \n", cpu_time_used);
+    printf("Tim sort took: %f \n", cpu_time_used);
+
+    //Insertion sort
+    createArray(arr);
+    start = clock();
+    insertionSort(arr, 0, len-1);
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+    print_sorted(arr);    
+    printf("Insertion sort took: %f \n", cpu_time_used);
     return 0;
 }
